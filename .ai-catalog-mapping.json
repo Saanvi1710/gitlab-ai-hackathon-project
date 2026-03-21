@@ -1,0 +1,25 @@
+{
+  "schema_version": "1.0",
+  "agents": {
+    "agents/agent.yml": {
+      "catalog_id": "gid://gitlab/Ai::Catalog::Item/1005877",
+      "name": "README Auto Generator",
+      "created_at": "2026-03-21T10:41:33.165Z",
+      "item_consumers": {
+        "group": {
+          "id": "gid://gitlab/Ai::Catalog::ItemConsumer/5583213"
+        },
+        "project": {
+          "id": "gid://gitlab/Ai::Catalog::ItemConsumer/5583214"
+        }
+      },
+      "latest_sync": {
+        "git_tag": "v1",
+        "catalog_version": "1.0.0",
+        "synced_at": "2026-03-21T10:41:33.165Z",
+        "definition_hash": "40fb1bcd1767d8bb"
+      }
+    }
+  },
+  "flows": {}
+}
