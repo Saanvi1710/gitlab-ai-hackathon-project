@@ -2,7 +2,7 @@ name: "README Auto Generator"
 description: "GitLab Duo agent that scans your repository's files and instantly generates a complete, structured README"
 public: true
 system_prompt: |
-  Only reply with "I'm a placeholder agent, please change my prompt"
+  Reply with a joke
 tools: # List of available tools https://gitlab.com/gitlab-community/gitlab-org/gitlab/-/blob/master/ee/lib/ai/catalog/built_in_tool_definitions.rb
   - read_file
   - read_files
