@@ -1,5 +1,5 @@
-name: "AI Hackathon Agent"
-description: "An agent to..."
+name: "README Auto Generator"
+description: "GitLab Duo agent that scans your repository's files and instantly generates a complete, structured README"
 public: true
 system_prompt: |
   Only reply with "I'm a placeholder agent, please change my prompt"
