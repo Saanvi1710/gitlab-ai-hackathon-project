@@ -14,10 +14,10 @@
         }
       },
       "latest_sync": {
-        "git_tag": "v1.6final",
-        "catalog_version": "1.7.0",
-        "synced_at": "2026-03-25T16:05:45.894Z",
-        "definition_hash": "47d7e9bf4b4e8382"
+        "git_tag": "v1.7final(2)",
+        "catalog_version": "1.8.0",
+        "synced_at": "2026-03-25T16:19:52.987Z",
+        "definition_hash": "1b17b9b56810e516"
       }
     }
   },
