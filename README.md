@@ -1,142 +1,188 @@
-# Test Health Intelligence Agent
+# Universal Test Audit Agent
 
-> A GitLab Duo custom agent that autonomously audits a repository's test suite across five dimensions and generates a prioritised health report with concrete fixes — so developers spend less time chasing bugs and more time shipping features.
-
----
+A GitLab-based autonomous agent that audits a repository’s test suite, identifies quality risks, and generates a structured Test Health Report along with fixed test files for the highest-priority issues.
 
 ## Overview
 
-Poor test quality is one of the most expensive hidden problems in software development. Flaky tests erode team trust. Brittle tests shatter during refactors. Missing edge cases let critical bugs slip into production. Most AI tools can *generate* tests, but none reason about the *health* of an existing test suite.
+The Universal Test Audit Agent is designed to analyze any software project’s tests in a repo-aware way. It does not assume a specific codebase structure until it inspects the repository. The agent reads the project layout, discovers tests and source files, reviews pipeline history, and evaluates the suite across five dimensions:
 
-**Test Health Intelligence Agent** changes that. Point it at any GitLab repository and it performs a deep, multi-dimensional audit — reading your source code, analysing your test files, examining your pipeline history — then produces a structured Test Health Report as a GitLab Issue and writes fixed versions of the most critical problems it finds.
+- Flaky tests
+- Brittle tests
+- Missing edge cases
+- Integration coverage gaps
+- Test documentation quality
 
-This agent was built for the [GitLab AI Hackathon](https://gitlab.com/gitlab-ai-hackathon) as a demonstration of what agentic AI can do when given access to the full context of a living software project.
+After the audit, it creates a GitLab issue containing the report and writes corrected test files for the top issues.
 
----
+## Goals
 
-## The Five Dimensions
+- Improve test reliability
+- Reduce false positives and intermittent failures
+- Replace brittle implementation-coupled tests with behavior-focused tests
+- Increase edge-case and integration coverage
+- Improve test readability and maintainability
 
-| Dimension | What It Catches |
-|---|---|
-| 🎲 **Flaky Tests** | `datetime.now()` without mocking, real network calls, timezone-dependent logic |
-| 🔩 **Brittle Tests** | Tests coupled to private attributes, internal data formats, implementation details |
-| 🕳 **Missing Edge Cases** | Empty inputs, boundary values, invalid types, uncovered exception paths |
-| 🔗 **Integration Gaps** | Untested boundaries between modules, external services, and APIs |
-| 📝 **Documentation Quality** | Cryptic test names, missing docstrings, no clear assertion intent |
+## What the Agent Does
 
----
+1. Discovers the project structure.
+2. Finds and reads all test files.
+3. Reads the corresponding source files.
+4. Reviews recent pipeline history and commit activity.
+5. Produces a detailed test health analysis.
+6. Creates a GitLab issue for the report.
+7. Writes fixed versions of the three highest-priority test files.
 
-## How It Works
+## Audit Dimensions
 
-When triggered via GitLab Duo Chat, the agent runs a seven-step autonomous workflow:
+### 1. Flaky Tests
+Looks for tests that may fail intermittently because they rely on:
 
-```
-1. List repository tree          → understand project structure
-2. Find and read all test files  → analyse what is being tested
-3. Read all source files         → understand what should be tested
-4. Examine pipeline history      → detect flakiness patterns over time
-5. Perform five-dimension audit  → identify every category of problem
-6. Create a GitLab Issue         → structured Test Health Report with scores
-7. Write fixed test files        → concrete, ready-to-use fixes for top issues
-```
+- current time
+- random values
+- real network calls
+- SMTP calls
+- file system state
+- execution order
+- sleep-based waiting
 
-No human is in the loop between steps. The agent reasons, decides, and acts autonomously.
+### 2. Brittle Tests
+Looks for tests that are too tightly coupled to implementation details, such as:
 
----
+- private attributes
+- internal helper methods
+- exact formatting internals
+- unstable data structures
 
-## Demo
+### 3. Missing Edge Cases
+Checks whether public functions are covered for:
 
-To see the agent in action, trigger it on any public GitLab repository:
+- null or empty inputs
+- boundary values
+- invalid types
+- out-of-range values
+- expected exceptions
 
-```
-Perform a full test health audit on this project: hhttps://gitlab.com/Saanvi1710/task-manager
-```
+### 4. Integration Coverage Gaps
+Checks whether interactions between components are tested, such as:
 
-The agent will produce:
-- A **Test Health Report Issue** with a score out of 100 and findings across all five dimensions
-- **`tests/fixed_*.py` files** with corrected versions of the most critical test problems
+- module-to-module calls
+- database interactions
+- API calls
+- email or notification flows
 
-### Example Test Project
+### 5. Test Documentation Quality
+Flags tests that are hard to understand because of:
 
-A purpose-built test project demonstrating all five problem types is available at:
-**[https://gitlab.com/Saanvi1710/task-manager](https://gitlab.com/Saanvi1710/task-manager)**
+- cryptic names
+- weak intent
+- missing comments or docstrings
+- unclear assertions
 
-This Python Flask task management API contains deliberately seeded test health issues across all five dimensions, making it an ideal demo target.
+## Workflow
 
----
+### Step 1: Discover the Project Structure
+Use the repository tree to identify:
 
-## Tech Stack
+- source directories
+- test directories
+- dependency files
+- project layout
 
-| Component | Technology |
-|---|---|
-| Agent Platform | GitLab Duo Agent Platform |
-| Agent Type | Custom Agent |
-| Configuration | YAML (`agents/agent.yml`) |
-| Language Model | GitLab Duo (built-in LLM) |
-| Tools Used | `list_repository_tree`, `find_files`, `read_files`, `grep`, `get_job_logs`, `create_issue`, `create_file_with_contents` |
-| Test Project Stack | Python 3.11, Flask 3.0, pytest 7.4 |
+### Step 2: Read All Test Files
+Locate and read every test file in the repository.
 
----
+### Step 3: Read Source Files
+Read the source files that the tests exercise.
 
-## Project Structure
+### Step 4: Inspect Pipeline History
+Review recent job logs and commit history for failed or unstable tests.
 
-```
-.
-├── agents/
-│   └── agent.yml          ← Agent definition: system prompt + tools
-├── flows/
-│   └── flow.yml.template  ← Flow template (not used in this project)
-├── .ai-catalog-mapping.json
-├── LICENSE
-└── README.md
-```
+### Step 5: Perform the Test Audit
+Evaluate the suite across all five audit dimensions and assign severity.
 
----
+### Step 6: Generate the Report
+Create a GitLab issue titled:
 
-## Installation & Usage
+`Test Health Report — [date]`
 
-### Prerequisites
-- A GitLab account with GitLab Duo enabled
-- Maintainer or Owner access to a project where you want to enable the agent
+The report should include:
 
-### Enable the Agent
+- overall score
+- summary
+- findings by dimension
+- priority recommendations
 
-1. Go to [AI Catalog → Agents](https://gitlab.com/gitlab-ai-hackathon/participants/Saanvi1710) and find **Test Health Intelligence Agent**
-2. Navigate to the project you want to audit → **Automate → Agents**
-3. Click **Enable** next to Test Health Intelligence Agent
-4. Open **GitLab Duo Chat** in the left sidebar
-5. Select **Test Health Intelligence Agent** from the New Chat dropdown
-6. Make sure the **Agentic toggle is ON**
+### Step 7: Generate Fixes
+For the three highest-severity issues, create fixed test files using the repository’s file creation tool.
 
-### Trigger the Agent
+## Output Requirements
 
-```
-Perform a full test health audit on this project: https://gitlab.com/YOUR_USERNAME/YOUR_PROJECT
-```
+The agent must:
 
-### View Results
+- base findings on actual repository evidence
+- include file names and line numbers
+- avoid inventing problems
+- keep explanations understandable to junior developers
+- preserve passing tests
+- avoid editing original test files
 
-- Check the project's **Issues** tab for the generated Test Health Report
-- Check the `tests/` directory for `fixed_*.py` files with corrected test code
+## Tools Used
 
----
+The agent may use:
 
-## What Makes This Different
+- `list_repository_tree`
+- `find_files`
+- `read_file`
+- `read_files`
+- `grep`
+- `get_job_logs`
+- `list_commits`
+- `create_issue`
+- `create_file_with_contents`
+- `get_project`
 
-Most AI coding tools are **reactive** — they respond to what you paste into a chat window. This agent is **proactive and contextual**. It has access to your project's entire history — every commit, every pipeline run, every file — and reasons across all of it to find problems that a static code analysis tool would never catch.
+## Expected Deliverables
 
-The flaky test detector, for example, doesn't just look at code statically. It cross-references pipeline run history with test code to identify tests that show inconsistent behaviour over time. This is something no IDE plugin or code completion tool currently does.
+### 1. Test Health Report
+A GitLab issue containing the audit results.
 
----
+### 2. Fixed Test Files
+New files created for the top three issues, named in the format:
 
-## Responsible AI
+`tests/fixed_[original_filename].py`
 
-This agent operates under the following principles:
+Each fixed file should include a short comment at the top explaining:
 
-- **It never invents findings.** Every issue reported is grounded in specific file names and line numbers found in the actual repository.
-- **It never modifies original files.** Fixes are always written as new `fixed_*.py` files, leaving the original test suite untouched.
-- **It acknowledges good work.** If a test is well-written, the agent says so rather than manufacturing problems.
-- **It explains in plain English.** Every finding is described in language accessible to a junior developer, not just technical jargon.
+- what was wrong
+- what the fix changes
+- why the new version is safer or more maintainable
+
+## Notes
+
+- The agent should adapt to the repository it finds.
+- It should not assume Python unless the repository evidence supports it.
+- It should not create issues instead of files.
+- It should not overwrite existing code.
+- It should not report a problem unless it can point to concrete evidence.
+
+## Example Use Case
+
+This agent is useful when you want to:
+
+- assess test reliability before a demo
+- improve a legacy test suite
+- identify hidden quality risks
+- generate safer test replacements
+- make quality assurance more systematic
+
+## Maintenance
+
+When updating the prompt or workflow:
+
+- keep the steps repository-aware
+- keep the output structure stable
+- avoid hardcoding project-specific assumptions
+- ensure file creation remains part of the workflow
 
 ---
 
