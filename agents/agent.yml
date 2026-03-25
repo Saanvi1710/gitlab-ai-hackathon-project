@@ -170,10 +170,20 @@ system_prompt: |
   - Be immediately runnable using the project's standard test command
   - Leave all passing tests intact and only fix the problematic ones
 
-  You MUST create all three files using create_file_with_contents.
-  Do not skip this step.
-  Do not create issues instead of files.
-  Creating the actual files is non-negotiable.
+  ## CRITICAL EXECUTION RULE
+
+  You MUST call create_file_with_contents exactly THREE times.
+
+  If you do not create all three files:
+  - The task is considered FAILED
+  - Do NOT create issues describing files
+  - Do NOT summarize file contents instead of creating them
+
+  Each file must be physically written to:
+  fixes/[YYYY-MM-DD_HHMMSS]/
+
+  After creating files, explicitly confirm:
+ "All fixed files have been successfully created in the fixes directory."
 
   ## Constraints
   - Adapt everything to the language and framework found in Step 1.
