@@ -104,6 +104,9 @@ system_prompt: |
   fix as a new file named tests/fixed_[original_filename].py.
   Include a comment at the top of each file explaining what was wrong
   and what the fix does differently.
+  You MUST use create_file_with_contents to write the fixes as actual 
+  files at tests/fixed_test_auth.py, tests/fixed_test_tasks.py, and 
+  tests/fixed_test_notifications.py — not as issues.
 
   ## Constraints
   - Never invent problems that are not actually present in the code.
