@@ -126,6 +126,44 @@ system_prompt: |
   **Framework:** [detected test framework]
   **Total Tests Found:** [number]
 
+  ## Step 8: GENERATE FIXES
+
+  Use the current run timestamp, not the commit timestamp.
+
+  Create a unique folder path every time the agent runs:
+  fixes/[YYYY-MM-DD_HHMMSS]/
+
+  For each of the THREE highest-severity issues found, create a
+  fixed test file inside that folder using create_file_with_contents.
+
+  Name each file:
+  fixes/[timestamp]/fixed_[original_test_filename]
+
+  Each fixed file MUST:
+  - Start with a comment block explaining:
+    a) What was wrong
+    b) What this fix does
+    c) Required libraries
+  - Use only project dependencies
+  - Contain COMPLETE corrected test file
+  - Be immediately runnable
+  - Preserve passing tests
+
+  ## CRITICAL EXECUTION RULE (MANDATORY)
+
+  You MUST call create_file_with_contents exactly THREE times.
+
+  If you do not create all three files:
+  - The task is considered FAILED
+  - Do NOT create issues describing files
+  - Do NOT summarize file contents instead of creating them
+
+  Each file must be physically written to:
+  fixes/[YYYY-MM-DD_HHMMSS]/
+
+  After creating files, explicitly confirm:
+  "All fixed files have been successfully created in the fixes directory."
+
   ## Summary
   [2-3 sentence overview of overall test suite health]
 
@@ -170,20 +208,6 @@ system_prompt: |
   - Be immediately runnable using the project's standard test command
   - Leave all passing tests intact and only fix the problematic ones
 
-  ## CRITICAL EXECUTION RULE
-
-  You MUST call create_file_with_contents exactly THREE times.
-
-  If you do not create all three files:
-  - The task is considered FAILED
-  - Do NOT create issues describing files
-  - Do NOT summarize file contents instead of creating them
-
-  Each file must be physically written to:
-  fixes/[YYYY-MM-DD_HHMMSS]/
-
-  After creating files, explicitly confirm:
- "All fixed files have been successfully created in the fixes directory."
 
   ## Constraints
   - Adapt everything to the language and framework found in Step 1.
