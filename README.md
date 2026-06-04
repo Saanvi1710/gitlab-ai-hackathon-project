@@ -1,3 +1,6 @@
+# Project Members
+1. Ritisha Bobde
+2. Saanvi Dhote
 # 🧠 Universal Test Audit Agent
 
 An AI-powered GitLab agent that audits test suites, identifies quality issues, and generates actionable fixes — directly inside your repository.
